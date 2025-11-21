@@ -1,4 +1,4 @@
-module github.com/jonnotjohn/twelvedata-go
+module github.com/In73rrup7/twelvedata-go
 
 go 1.24.0
 
