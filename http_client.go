@@ -5,11 +5,13 @@
 package twelvedata
 
 import (
+	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/go-resty/resty/v2"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"net/http"
-	"time"
 )
 
 type HTTPClient struct {
@@ -60,5 +62,8 @@ func (h *HTTPClient) Get(endpoint string, data map[string]string) (response *res
 		break
 	}
 
+	if err == nil && response.StatusCode() != http.StatusOK {
+		return response, fmt.Errorf("API returned non-200 status code: %d", response.StatusCode())
+	}
 	return response, err
 }
