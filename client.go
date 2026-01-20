@@ -18,7 +18,7 @@ type APIUrl string
 const (
 	apiTwelveDataURL  APIUrl = "https://api.twelvedata.com"
 	apiKeyDefault            = "demo"
-	apiTimeoutDefault        = 25
+	apiTimeoutDefault        = 90
 )
 
 type Config struct {
@@ -87,12 +87,12 @@ func NewAPIClient(cfg Config) (*APIClient, error) {
 	}
 
 	if HTTPClient.retryCount == nil || *HTTPClient.retryCount == 0 {
-		retryCount := 1
+		retryCount := 3
 		HTTPClient.retryCount = &retryCount
 	}
 
 	if HTTPClient.retryWaitTime == nil || *HTTPClient.retryWaitTime == 0 {
-		retryWaitTime := 1 * time.Second
+		retryWaitTime := 5 * time.Second
 		HTTPClient.retryWaitTime = &retryWaitTime
 	}
 
