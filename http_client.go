@@ -7,6 +7,8 @@ package twelvedata
 import (
 	"fmt"
 	"net/http"
+	"strconv"
+	"sync"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -21,6 +23,13 @@ type HTTPClient struct {
 	retryCount    *int
 	retryWaitTime *time.Duration
 }
+
+var (
+	// apiCreditsLeft stores the last known API credits remaining from TwelveData response headers
+	apiCreditsLeft int = -1
+	// apiCreditsMu protects concurrent access to apiCreditsLeft
+	apiCreditsMu sync.Mutex
+)
 
 func (h *HTTPClient) Get(endpoint string, data map[string]string) (response *resty.Response, err error) {
 	if data == nil {
@@ -59,6 +68,19 @@ func (h *HTTPClient) Get(endpoint string, data map[string]string) (response *res
 		}
 
 		// If we get here, the request was successful
+		// Capture API credits from response headers
+		if creditsLeftStr := response.Header().Get("api-credits-left"); creditsLeftStr != "" {
+			if credits, parseErr := strconv.Atoi(creditsLeftStr); parseErr == nil {
+				apiCreditsMu.Lock()
+				apiCreditsLeft = credits
+				apiCreditsMu.Unlock()
+				h.logger.Debug(
+					"API credits captured",
+					zap.Int("creditsLeft", credits),
+					zap.String("endpoint", endpoint),
+				)
+			}
+		}
 		break
 	}
 
@@ -66,4 +88,12 @@ func (h *HTTPClient) Get(endpoint string, data map[string]string) (response *res
 		return response, fmt.Errorf("API returned non-200 status code: %d", response.StatusCode())
 	}
 	return response, err
+}
+
+// GetAPICreditsLeft returns the last known API credits remaining from TwelveData
+// Returns -1 if no API call has been made yet
+func GetAPICreditsLeft() int {
+	apiCreditsMu.Lock()
+	defer apiCreditsMu.Unlock()
+	return apiCreditsLeft
 }
