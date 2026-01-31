@@ -196,5 +196,9 @@ func (c *APIClient) GetTimeSeries(req TimeSeriesRequest) (candles *TimeSeriesRes
 		return nil, errors.Wrap(err, "Error unmarshalling time series response")
 	}
 
+	if candles == nil {
+		return nil, errors.New("API returned nil time series response")
+	}
+
 	return candles, nil
 }

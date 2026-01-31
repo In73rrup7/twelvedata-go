@@ -130,5 +130,9 @@ func (c *APIClient) GetQuote(req QuoteRequest) (quote *Quote, err error) {
 		return nil, errors.Wrap(err, "Error unmarshalling quote response")
 	}
 
+	if quote == nil {
+		return nil, errors.New("API returned nil quote response")
+	}
+
 	return quote, nil
 }
