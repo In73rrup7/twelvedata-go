@@ -84,34 +84,34 @@ type Quote struct {
 	DateTime              TDTime            `json:"datetime"`
 	Timestamp             TDTime            `json:"timestamp"`
 	LastQuoteAt           TDTime            `json:"last_quote_at"`
-	Open                  float64           `json:"open,string"`
-	High                  float64           `json:"high,string"`
-	Low                   float64           `json:"low,string"`
-	Close                 float64           `json:"close,string"`
-	Volume                float64           `json:"volume,string"`
-	PreviousClose         float64           `json:"previous_close,string"`
-	Change                float64           `json:"change,string"`
-	PercentChange         float64           `json:"percent_change,string"`
-	AverageVolume         float64           `json:"average_volume,string"`
-	Rolling1DayChange     float64           `json:"rolling_1day_change,string"`
-	Rolling7DayChange     float64           `json:"rolling_7day_change,string"`
-	RollingPeriodChange   float64           `json:"rolling_period_change,string"`
+	Open                  TDFloat64         `json:"open"`
+	High                  TDFloat64         `json:"high"`
+	Low                   TDFloat64         `json:"low"`
+	Close                 TDFloat64         `json:"close"`
+	Volume                TDFloat64         `json:"volume"`
+	PreviousClose         TDFloat64         `json:"previous_close"`
+	Change                TDFloat64         `json:"change"`
+	PercentChange         TDFloat64         `json:"percent_change"`
+	AverageVolume         TDFloat64         `json:"average_volume"`
+	Rolling1DayChange     TDFloat64         `json:"rolling_1day_change"`
+	Rolling7DayChange     TDFloat64         `json:"rolling_7day_change"`
+	RollingPeriodChange   TDFloat64         `json:"rolling_period_change"`
 	IsMarketOpen          bool              `json:"is_market_open"`
 	FiftyTwoWeek          QuoteFiftyTwoWeek `json:"fifty_two_week"`
-	ExtendedChange        float64           `json:"extended_change,string"`
-	ExtendedPercentChange float64           `json:"extended_percent_change,string"`
-	ExtendedPrice         float64           `json:"extended_price,string"`
+	ExtendedChange        TDFloat64         `json:"extended_change"`
+	ExtendedPercentChange TDFloat64         `json:"extended_percent_change"`
+	ExtendedPrice         TDFloat64         `json:"extended_price"`
 	ExtendedTimestamp     int64             `json:"extended_timestamp"`
 }
 
 type QuoteFiftyTwoWeek struct {
-	Low               float64 `json:"low,string"`
-	High              float64 `json:"high,string"`
-	LowChange         float64 `json:"low_change,string"`
-	HighChange        float64 `json:"high_change,string"`
-	LowChangePercent  float64 `json:"low_change_percent,string"`
-	HighChangePercent float64 `json:"high_change_percent,string"`
-	Range             string  `json:"range"`
+	Low               TDFloat64 `json:"low"`
+	High              TDFloat64 `json:"high"`
+	LowChange         TDFloat64 `json:"low_change"`
+	HighChange        TDFloat64 `json:"high_change"`
+	LowChangePercent  TDFloat64 `json:"low_change_percent"`
+	HighChangePercent TDFloat64 `json:"high_change_percent"`
+	Range             string    `json:"range"`
 }
 
 func (c *APIClient) GetQuote(req QuoteRequest) (quote *Quote, err error) {
